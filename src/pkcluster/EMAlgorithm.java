@@ -623,9 +623,26 @@ public class EMAlgorithm {
 		return res;
 	}
 	
+	public int iterativeLog(int N){
+		if(N<=1){
+			return 0;
+		}
+		if(N==2){
+			return 1;
+		}
+		if(N<=15){
+			return 2;
+		}
+		if(N<=3814279){
+			return 3;
+		}
+		return 4;
+	}
+	
 	public double MDL(double [][] loglikelihood, double[][] Xil){
 		double Q=likel(loglikelihood,Xil);
-		return Q-0.5*Math.log(N_patients)*num_clusters*(4+((num_clusters-1)/num_clusters));
+		//return Q-0.5*Math.log(N_patients)*num_clusters*(4+((num_clusters-1)/num_clusters));
+		return Q-0.5*iterativeLog(N_patients)*num_clusters*(4+((num_clusters-1)/num_clusters));
 	}
 	
 	public Output runEM(){
