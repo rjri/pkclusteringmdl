@@ -14,6 +14,13 @@ import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 
 public class EMRun {
@@ -121,7 +128,7 @@ public class EMRun {
 				double Q=-150;
 				long startTime,endTime;
 				double duration;
-				int M0;
+				final int M0;
 				try{ 
 					K=Integer.parseInt(textField_1.getText());
 					startTime = System.currentTimeMillis();
@@ -129,7 +136,7 @@ public class EMRun {
 					M0=slider.getValue();
 					EMAlgorithm E;
 					o2=null;
-					for(k=0;k<K;k++){
+					/*for(k=0;k<K;k++){
 						E=new EMAlgorithm(A.T,A.M,M0);
 						E.inicialize(A);
 						o1=E.runEM();
@@ -146,8 +153,32 @@ public class EMRun {
 						System.out.println("M: "+ EMAlgorithm.maxMDLnumclusttotal+">> "+Si);
 						
 						
+					}*/
+					
+					ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+					List<Future<Output>> futures = new ArrayList<Future<Output>>();
+					for(k=0;k<K;k++){
+						Callable<Output> callable = new Callable<Output>(){
+							public Output call(){
+								EMAlgorithm E=new EMAlgorithm(A.T,A.M,M0);
+								E.inicialize(A);
+								Output op=E.runEM();
+								return op;
+							}
+						};
+						futures.add(executorService.submit(callable));
 					}
-					System.out.println("Max MDL result: "+EMAlgorithm.maxMDLtotal+"; Number of Clusters: "+EMAlgorithm.maxMDLnumclusttotal);
+					executorService.shutdown();
+					executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+					int num=0;
+					for(Future<Output> future : futures){
+						o1=future.get();
+						System.out.println("num: "+num);o1.imprime();
+						if(num==0||o1.Q>Q){Q=o1.Q;o2=o1;System.out.println("^ new best");}
+						num++;
+					}
+					
+					//System.out.println("Max MDL result: "+EMAlgorithm.maxMDLtotal+"; Number of Clusters: "+EMAlgorithm.maxMDLnumclusttotal);
 					//o=new Output(EMAlgorithm.maxMDL_C_params,EMAlgorithm.maxMDLtotal,k,EMAlgorithm.maxMDL_Sigma,EMAlgorithm.maxMDL_w,EMAlgorithm.maxMDLnumclusttotal,EMAlgorithm.maxMDL_cluster);
 					o2.imprime();
 					

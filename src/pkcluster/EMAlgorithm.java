@@ -14,12 +14,12 @@ public class EMAlgorithm {
 	double conv;
 	double[]w;
 	Data A;
-	static double maxMDLtotal=-10000;
-	static int maxMDLnumclusttotal=0;
-	static double[][] maxMDL_C_params;
-	static double[] maxMDL_Sigma;
-	static double[] maxMDL_w;
-	static int[] maxMDL_cluster;
+	double maxMDLtotal=-10000;
+	int maxMDLnumclusttotal=0;
+	double[][] maxMDL_C_params;
+	double[] maxMDL_Sigma;
+	double[] maxMDL_w;
+	int[] maxMDL_cluster;
 	
 	public EMAlgorithm(double[] AT, double[][] AY, int M0){
 		int i;
