@@ -184,7 +184,7 @@ public class EMRun {
 					
 					endTime = System.currentTimeMillis();
 					duration = endTime - startTime;
-					duration=duration*0.001/k;
+					duration=duration*0.001/*/k*/;
 					o=o2;
 					time=duration;
 					textPane.setText("DONE!");

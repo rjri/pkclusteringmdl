@@ -29,7 +29,7 @@ public class Data{
 		String dataRow=CSVfile.readLine();
 		dataRow=CSVfile.readLine();
 		while(dataRow!=null){
-			String [] dataArray=dataRow.split(";");
+			String [] dataArray=dataRow.split(","); //mudar entre , e ;
 			double[] intArray= new double[dataArray.length];
 			int i=0;
 			while(i<dataArray.length){
