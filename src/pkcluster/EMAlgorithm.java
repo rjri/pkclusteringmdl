@@ -29,7 +29,6 @@ public class EMAlgorithm {
 		N_patients=AY.length;
 		if(M0==0)num_clusters=N_patients/3;
 		else num_clusters=M0;
-//		if(M<10)M=10;
 		T=AT;
 		Y=AY;
 		conv=0;
@@ -159,17 +158,9 @@ public class EMAlgorithm {
 				y+=x;
 			}
 			W[i]=Math.log(y);
-			//log(sum(w*p)) ?
 		}
-	//	return W;
-	//}
-	//public double[][] actX(double[][]loglikelihood,double[]W){
-		//CALCULADO LOG(X)
-		//GUARDADO X
 		double[][]X=new double[N_patients][num_clusters];
-		//int i,l;
 		double ps=Math.pow(10, -10);
-		//double x;
 		double[] Xt=new double[num_clusters];
 		for(l=0;l<num_clusters;l++)Xt[l]=0;
 		
@@ -256,14 +247,6 @@ public class EMAlgorithm {
 		double m=0;
 		int l;
 		for(l=0;l<num_clusters;l++)if(Xil[i][l]>m){m=Xil[i][l];id=l;}
-		
-/*ASMC		if(id==-1){
-			System.out.print("ID MAXIMO: "+M);
-			for(l=0;l<M;l++)System.out.print(X[i][l]+"; ");
-			System.out.println();
-			for(l=0;l<M;l++)System.out.println(C[l][0]+"; "+C[l][1]+"; "+C[l][2]);
-		}
-*/		
 		return id;
 	}
 	public int[] actualizeClusterAssignment(double[][]Xil){
@@ -278,8 +261,7 @@ public class EMAlgorithm {
 				AB[i][2]=C_params[l][2];
 				cluster[i]=l;}
 			else{ cluster[i]=0;}
-			cmax[l]++;
-						
+			cmax[l]++;						
 		}
 		return cmax;
 	}
@@ -312,16 +294,13 @@ public class EMAlgorithm {
 		}
 		
 		//COLAPSO 2
-		for(l=0;l<num_clusters;l++)if(w[l]!=0&&w[l]<omega
-				//asmc&&cmax[l]==0
-				){
+		for(l=0;l<num_clusters;l++)if(w[l]!=0&&w[l]<omega){
 			w[l]=0;
 			m++;
 		}
 		
 		//ACTUALIZA OS PARAMETORS APOS COLAPSAR, SE COLAPSOU
 		if(m>0){
-//			System.out.println("COLAPSA");
 			conv=0;
 			bool=1;
 			double[] w1=new double[num_clusters-m];
@@ -349,14 +328,12 @@ public class EMAlgorithm {
 		double res=0;
 		double[][] F;
 		double[][] P;
-		//double[] W;
 		double[][] X;
 		int i,l;
 		
 		F=actClustConcentration();
 		P=actLoglikelihood(F);
 		X=actXil(P);
-		//X=actX(P,W);
 		
 		for(i=0;i<N_patients;i++)for(l=0;l<num_clusters;l++)
 			res=res+X[i][l]*(Math.log(w[l])+P[i][l]);
@@ -501,9 +478,6 @@ public class EMAlgorithm {
 				L=ParamsForNewton(bn[0],bn[1],l,Xil);
 				if(L[0]<0)L[0]=-L[0];
 				if(L[3]<0)L[3]=-L[3];
-//ASMC				if(L[0]>0.01||L[3]>0.01||L[1]>0||L[4]>0){
-//ASMC				System.out.print("#### AUMENTAR K #### "+bool1+";"+bool2+";");
-//ASMC				System.out.println(bn[0]+";"+bn[1]+";"+L[0]+";"+L[3]+";"+L[1]+";"+L[4]);}
 				}
 		}
 		
@@ -523,15 +497,7 @@ public class EMAlgorithm {
 			if(!(0<bn[0]&&bn[0]<5))bn[0]=b1;
 			if(!(0<bn[1]&&bn[1]<5))bn[1]=b2;
 			
-			
-//			bn=Cotovelo(b1,b2,l,X,bool1,bool2,bn);
-			
 			L=ParamsForNewton(bn[0],bn[1],l,Xil);
-//ASMC			System.out.print("#### COTOVELO #### ");
-//ASMC			System.out.println(bn[0]+";"+bn[1]+";"+L[0]+";"+L[3]+";"+L[1]+";"+L[4]);
-//ASMC			int j;
-//ASMC			for(j=0;j<C.length;j++)	System.out.print("{"+C[j][0]+","+C[j][1]+","+C[j][2]+"},");
-//ASMC			System.out.println();
 		}
 			
 		if(bn[0]>bn[1]){x1=bn[0];bn[0]=bn[1];bn[1]=x1;}
@@ -583,13 +549,7 @@ public class EMAlgorithm {
 			if(0>bn[0])bn[0]=b1;
 			if(5<bn[1])bn[1]=b2;
 			if(bn[0]>bn[1]){x1=bn[0];bn[0]=bn[1];bn[1]=x1;}
-//			if(bool1==1)bn[0]=b1;
-//			if(bool2==1)bn[1]=b2;
-			}
-		
-//		System.out.println("#### COTOVELO ###");
-//		if(!(0<bn[0]&&bn[0]<bn[1]&&bn[1]<5))
-//			System.out.println("ERRO: "+ bn[0]+"; "+bn[1]+"; "+l+"; "+C[l][0]+"; "+B);
+		}
 		
 		return bn;
 	}
@@ -623,52 +583,24 @@ public class EMAlgorithm {
 		return res;
 	}
 	
-	/*public int iterativeLog(int N){
-		if(N<=1){
-			return 0;
-		}
-		if(N==2){
-			return 1;
-		}
-		if(N<=15){
-			return 2;
-		}
-		if(N<=3814279){
-			return 3;
-		}
-		return 4;
-	}*/
-	
 	public double MDL(double [][] loglikelihood, double[][] Xil){
 		double Q=likel(loglikelihood,Xil);
-		//return Q-0.5*Math.log(N_patients)*num_clusters*(4+((num_clusters-1)/num_clusters));
 		return Q-0.5*Math.log(N_patients)*num_clusters*(4+((num_clusters-1)/num_clusters));
 	}
 	
 	public Output runEM(){
-		Output out;
+		Output out;		
 		
-		double D1,omega;
-		//POR ANALISAR ESTES VALORES. FUTURO VEM DE INPUT
-		//ASMC omega=0.05/2;
-		omega=0.05/2;
-		D1=9;
-		
-		
-		int j=0,i,k,it;
+		int j=0,i,it;
 		double[][] cluster_concentration;
 		double[][] loglikelihood;
 		//double[] W;
 		double[][] Xil;
-		int[] patientspercluster;
-		int bool=1;
-		double Q=-150;
-		//DEPOIS REMOVER OS PRINTS INTERNOS E O i E j DOS whiles		
+		double Q=-150;	
 		i=0;
 		
 		for(i=max_clusters;i>0;i--){
 			num_clusters=i;
-			//System.out.println("test2");
 			Sigma=new double[num_clusters];
 			for(i=0;i<num_clusters;i++)Sigma[i]=1;
 			
@@ -681,113 +613,40 @@ public class EMAlgorithm {
 			inicialize(A);
 			conv=0;
 			
-			//System.out.println("test");
-			
 			cluster_concentration=actClustConcentration();
 			loglikelihood=actLoglikelihood(cluster_concentration);
 			Xil=actXil(loglikelihood);
-			//X=actX(loglikelihood,W);
 			actSigma(Xil,cluster_concentration);
 			
 			j=0;
 			while(conv==0&&j<500){
-//				System.out.println("Passo "+j);
 				j++;
 				actCparams(Xil);
 				cluster_concentration=actClustConcentration();
 				loglikelihood=actLoglikelihood(cluster_concentration);
 				Xil=actXil(loglikelihood);
-				//X=actX(loglikelihood,W);
 				actSigma(Xil,cluster_concentration);
 			}
 			
-//			System.out.println("SAI "+j);
-			patientspercluster=actualizeClusterAssignment(Xil);
+			actualizeClusterAssignment(Xil);
 			
 			Q=likel(loglikelihood,Xil);
 			out=new Output(C_params,Q,j,Sigma,w,num_clusters,cluster);
-			//out.imprime();
 			double MDLresult=MDL(loglikelihood,Xil);
 			System.out.println("Q: "+Q+"; MDL: "+(MDLresult-Q)+"; MDL result: "+MDLresult);
 			if(MDLresult>maxMDLtotal){
 				maxMDLtotal=MDLresult;
 				maxMDLnumclusttotal=num_clusters;
 				for(it=0;it<C_params.length;it++){
-					//System.out.println(it+" "+maxMDL_C_params[it].length);
 					System.arraycopy(C_params[it], 0, maxMDL_C_params[it], 0, C_params[it].length);
 				}
-				//System.out.println("ok1");
 				System.arraycopy(Sigma, 0, maxMDL_Sigma, 0, Sigma.length);
-				//System.out.println("ok1.5");
 				System.arraycopy(w, 0, maxMDL_w, 0, w.length);
-				//System.out.println("ok1.75");
 				System.arraycopy(cluster, 0, maxMDL_cluster, 0, cluster.length);
-				//System.out.println("ok2");
-				//save results
 			}
-			//System.out.println("ok");
 		}
 		out=new Output(maxMDL_C_params,maxMDLtotal,j,maxMDL_Sigma,maxMDL_w,maxMDLnumclusttotal,maxMDL_cluster);
 
-/*		
-		while(bool==1&&i</*ASMC 10*//*50){*/
-/*			cluster_concentration=actClustConcentration();
-			loglikelihood=actLoglikelihood(cluster_concentration);
-			Xil=actXil(loglikelihood);
-			//X=actX(loglikelihood,W);
-			actSigma(Xil,cluster_concentration);
-			
-			j=0;
-			while(conv==0&&j<500){
-//				System.out.println("Passo "+j);
-				j++;
-				actCparams(Xil);
-				cluster_concentration=actClustConcentration();
-				loglikelihood=actLoglikelihood(cluster_concentration);
-				Xil=actXil(loglikelihood);
-				//X=actX(loglikelihood,W);
-				actSigma(Xil,cluster_concentration);
-			}
-			
-			
-//			System.out.println("SAI "+j);
-			patientspercluster=actualizeClusterAssignment(Xil);
-			
-			//ALTERAR A PARTIR DAQUI (MDL)
-			bool=colapsa(D1,omega,patientspercluster);
-			i++;
-			if(bool==0){
-				Q=likel(loglikelihood,Xil);
-				double MDLresult=MDL(loglikelihood,Xil);
-				System.out.println("Q: "+Q+"; MDL result: "+MDLresult);
-			}
-		}
-		
-		out=new Output(C_params,Q,j,Sigma,w,num_clusters,cluster);*/
-		
-		
-//		System.out.println("OUTPUT");
-//		System.out.println();
-//		
-//		System.out.println("Sigma: ");
-//		for(l=0;l<M;l++)System.out.print(Sigma[l]+"; ");
-//		System.out.println();
-//		
-//		System.out.println("Pesos: ");
-//		for(l=0;l<M;l++)System.out.print(w[l]+"; ");
-//		System.out.println();
-//		
-//		System.out.println("Number of clusters: "+M);
-//		
-//		System.out.println("a; ke; ka");
-//		for(l=0;l<M;l++)System.out.println(C[l][0]+"; "+C[l][1]+"; "+C[l][2]);
-		
-//		System.out.println("Dados dos pacientes");
-//		System.out.println("cl; a; ke; ka");
-//		for(i=0;i<N;i++)System.out.println(cluster[i]+"; "+100*AB[i][0]+"; "+AB[i][1]+"; "+AB[i][2]);
-		
-//		System.out.println("Q-value: "+likel());
-		
 		return out;
 	}
 

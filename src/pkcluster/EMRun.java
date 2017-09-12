@@ -7,11 +7,8 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -26,9 +23,8 @@ import java.util.concurrent.TimeUnit;
 public class EMRun {
 
 	public JFrame frame;
-	public JLabel lblTeseDoElson;
-	private JSlider slider;
-	private JTextField textField_1;
+	public JLabel lbl;
+	private JTextField textField_1, textField_2;
 	public int Max;
 	public int n;
 	public Data A;
@@ -58,21 +54,21 @@ public class EMRun {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 620, 180);
+		frame.setBounds(100, 100, 620, 200);
 		frame.setForeground(new Color(50, 50, 50));
 		frame.setFont(new Font("Dialog", Font.BOLD, 15));
 		frame.setTitle("Unsupervised Learning Algorithm for Pharmacokinetic Responses\n");
 		frame.setBackground(new Color(255, 255, 255));
 		frame.getContentPane().setLayout(null);
 		
-		lblTeseDoElson = new JLabel("Enter EM parameters");
-		lblTeseDoElson.setBounds(9, 0, 509, 50);
-		lblTeseDoElson.setForeground(new Color(0, 0, 153));
-		lblTeseDoElson.setFont(new Font("Dialog", Font.BOLD, 26));
-		frame.getContentPane().add(lblTeseDoElson);
+		lbl = new JLabel("Enter clustering parameters");
+		lbl.setBounds(9, 0, 509, 50);
+		lbl.setForeground(new Color(0, 0, 153));
+		lbl.setFont(new Font("Dialog", Font.BOLD, 26));
+		frame.getContentPane().add(lbl);
 		
 		final JTextPane textPane = new JTextPane();
-		textPane.setBounds(9, 92, 597, 47);
+		textPane.setBounds(9, 112, 597, 47);
 		textPane.setBackground(Color.GRAY);
 		textPane.setForeground(Color.BLUE);
 		textPane.setFont(new Font("Dialog", Font.BOLD, 24));
@@ -87,34 +83,23 @@ public class EMRun {
 		btnSairEm.setBounds(514, 17, 92, 25);
 		frame.getContentPane().add(btnSairEm);
 		
-		slider = new JSlider();
-		slider.setBounds(237, 44, 273, 50);
-		slider.setValue(10);
-		slider.setOrientation(SwingConstants.HORIZONTAL);
-		slider.setPaintLabels(true);
-		slider.setMaximum(Max);
-		slider.setMinimum(n);
-		frame.getContentPane().add(slider);
-		slider.setFont(new Font("Tahoma",Font.BOLD,12));
-        slider.setMajorTickSpacing((int)(Max-n)/5);
-        slider.setMinorTickSpacing((int)(Max-n)/100);
-        slider.setPaintLabels(true);
-        slider.setPaintTicks(true);
-        slider.setPaintTrack(true);
-        slider.setAutoscrolls(true);
-		
-        JLabel lblNClusters = new JLabel("Num clusters");
-		lblNClusters.setBounds(159, 44, 93, 22);
+        JLabel lblNClusters = new JLabel("Maximum number of clusters:");
+		lblNClusters.setBounds(9, 73, 210, 15);
 		frame.getContentPane().add(lblNClusters);
 		
-		JLabel lblNInputs = new JLabel("Rand Init");
-		lblNInputs.setBounds(9, 48, 70, 15);
+		JLabel lblNInputs = new JLabel("Random initializations:");
+		lblNInputs.setBounds(9, 48, 170, 15);
 		frame.getContentPane().add(lblNInputs);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(81, 46, 57, 19);
+		textField_1.setBounds(230, 46, 57, 19);
 		frame.getContentPane().add(textField_1);
 		textField_1.setColumns(10);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(230, 71, 57, 19);
+		frame.getContentPane().add(textField_2);
+		textField_2.setColumns(10);
 		
 		JButton btnEmRun = new JButton("Run");
 		btnEmRun.setBounds(514, 44, 92, 25);
@@ -132,28 +117,8 @@ public class EMRun {
 				try{ 
 					K=Integer.parseInt(textField_1.getText());
 					startTime = System.currentTimeMillis();
-					//M0= 3;/* ASMC slider.getValue();*/
-					M0=slider.getValue();
-					EMAlgorithm E;
+					M0=Integer.parseInt(textField_2.getText());
 					o2=null;
-					/*for(k=0;k<K;k++){
-						E=new EMAlgorithm(A.T,A.M,M0);
-						E.inicialize(A);
-						o1=E.runEM();
-						if(k==0||o1.Q>Q){Q=o1.Q;o2=o1;}
-						
-						//HERE : asmc
-						int i;
-					    String Si="";
-						for(i=0;i<o2.cluster.length-1;i++){
-				    		Si=Si+o2.cluster[i]+"; ";
-				    	}
-				    	i=o2.cluster.length-1;
-				    	Si=Si+o2.cluster[i];
-						System.out.println("M: "+ EMAlgorithm.maxMDLnumclusttotal+">> "+Si);
-						
-						
-					}*/
 					
 					ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 					List<Future<Output>> futures = new ArrayList<Future<Output>>();
@@ -178,13 +143,11 @@ public class EMRun {
 						num++;
 					}
 					
-					//System.out.println("Max MDL result: "+EMAlgorithm.maxMDLtotal+"; Number of Clusters: "+EMAlgorithm.maxMDLnumclusttotal);
-					//o=new Output(EMAlgorithm.maxMDL_C_params,EMAlgorithm.maxMDLtotal,k,EMAlgorithm.maxMDL_Sigma,EMAlgorithm.maxMDL_w,EMAlgorithm.maxMDLnumclusttotal,EMAlgorithm.maxMDL_cluster);
 					o2.imprime();
 					
 					endTime = System.currentTimeMillis();
 					duration = endTime - startTime;
-					duration=duration*0.001/*/k*/;
+					duration=duration*0.001;
 					o=o2;
 					time=duration;
 					textPane.setText("DONE!");

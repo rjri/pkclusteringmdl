@@ -17,7 +17,7 @@ import javax.swing.UIManager;
 public class Results {
  
 	public JFrame frame;
-	public JLabel lblTeseDoElson;
+	public JLabel lbl;
 	public Output o;
 	public double time;
 	
@@ -61,7 +61,7 @@ public class Results {
 		    int i,l;
 		    String Sw="",SS="",SC="",Si="";
 		    writer.append("Results\n");
-		    writer.append("Q value: "+O.Q+"\n");
+		    writer.append("MDL value: "+O.Q+"\n");
 		    writer.append("Clusters: "+O.cl+"\n");
 		    
 		    for(l=0;l<O.cl-1;l++){
@@ -97,18 +97,18 @@ public class Results {
 	
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 350);
+		frame.setBounds(100, 100, 450, 370);
 		frame.setForeground(new Color(255, 255, 255));
 		frame.setFont(new Font("Dialog", Font.BOLD, 15));
 		frame.setTitle("Unsupervised Learning Algorithm for Pharmacokinetic Responses\n");
 		frame.setBackground(new Color(0, 0, 0));
 		frame.getContentPane().setLayout(null);
 		
-		lblTeseDoElson = new JLabel("RESULTS");
-		lblTeseDoElson.setBounds(9, 0, 210, 62);
-		lblTeseDoElson.setForeground(new Color(0, 0, 153));
-		lblTeseDoElson.setFont(new Font("Dialog", Font.BOLD, 26));
-		frame.getContentPane().add(lblTeseDoElson);
+		lbl = new JLabel("RESULTS");
+		lbl.setBounds(9, 0, 210, 62);
+		lbl.setForeground(new Color(0, 0, 153));
+		lbl.setFont(new Font("Dialog", Font.BOLD, 26));
+		frame.getContentPane().add(lbl);
 		
 		
 		
@@ -134,12 +134,7 @@ public class Results {
 		});
 		frame.getContentPane().add(btnEmRun);
 		
-//		textField_1 = new JTextField();
-//		textField_1.setBounds(425, 65, 93, 19);
-//		frame.getContentPane().add(textField_1);
-//		textField_1.setColumns(10);
-		
-		JLabel lblTempo = new JLabel("Time");
+		JLabel lblTempo = new JLabel("Time:");
 		lblTempo.setBounds(9, 47, 47, 15);
 		frame.getContentPane().add(lblTempo);
 		
@@ -149,12 +144,12 @@ public class Results {
 		textField_3.setColumns(10);
 		
 		textField_4 = new JTextField();
-		textField_4.setBounds(9, 292, 419, 19);
+		textField_4.setBounds(9, 312, 419, 19);
 		frame.getContentPane().add(textField_4);
 		textField_4.setColumns(10);
 		
-		lblQValue = new JLabel("MDL");
-		lblQValue.setBounds(202, 65, 53, 24);
+		lblQValue = new JLabel("MDL:");
+		lblQValue.setBounds(222, 65, 53, 19);
 		frame.getContentPane().add(lblQValue);
 		
 		textField_5 = new JTextField();
@@ -162,40 +157,43 @@ public class Results {
 		frame.getContentPane().add(textField_5);
 		textField_5.setColumns(10);
 		
-		JLabel lblNClusters = new JLabel("Nb clusters");
-		lblNClusters.setBounds(9, 65, 78, 24);
+		JLabel lblNClusters = new JLabel("Number of clusters:");
+		lblNClusters.setBounds(9, 65, 158, 24);
 		frame.getContentPane().add(lblNClusters);
 		
 		textField_6 = new JTextField();
-		textField_6.setBounds(90, 69, 103, 19);
+		textField_6.setBounds(160, 69, 33, 19);
 		frame.getContentPane().add(textField_6);
 		textField_6.setColumns(10);
 		
-		JLabel lblPesos = new JLabel("Weights");
+		JLabel lblPesos = new JLabel("Weights:");
 		lblPesos.setBounds(9, 96, 74, 19);
 		frame.getContentPane().add(lblPesos);
 		
 		textField_7 = new JTextField();
-		textField_7.setBounds(90, 96, 338, 19);
+		textField_7.setBounds(100, 96, 328, 19);
 		frame.getContentPane().add(textField_7);
 		textField_7.setColumns(10);
 		
 		textField_8 = new JTextField();
-		textField_8.setBounds(90, 122, 338, 19);
+		textField_8.setBounds(100, 122, 328, 19);
 		frame.getContentPane().add(textField_8);
 		textField_8.setColumns(10);
 		
-		JLabel lblSigma = new JLabel("Variance");
-		lblSigma.setBounds(9, 122, 74, 19);
+		JLabel lblSigma = new JLabel("Variances:");
+		lblSigma.setBounds(9, 122, 84, 19);
 		frame.getContentPane().add(lblSigma);
 		
-		JLabel lblDadosDosPacientes = new JLabel("Subjects cluster");
-		lblDadosDosPacientes.setBounds(9, 270, 210, 19);
+		JLabel lblDadosDosPacientes = new JLabel("Clusters by subject:");
+		lblDadosDosPacientes.setBounds(9, 290, 210, 19);
 		frame.getContentPane().add(lblDadosDosPacientes);
 		
+		JLabel lblParams = new JLabel("Parameters a, b1 and b2 by cluster:");
+		lblParams.setBounds(9, 148, 284, 19);
+		frame.getContentPane().add(lblParams);
 		
 		textArea = new JTextArea();
-		textArea.setBounds(9, 152, 419, 115);
+		textArea.setBounds(9, 172, 419, 115);
 		frame.getContentPane().add(textArea);
 		
 		textField_3.setText(time+" s");

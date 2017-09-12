@@ -16,7 +16,7 @@ public class Main {
 
 	private JFrame frame;
 	private JTextField textField;
-	private JLabel lblTeseDoElson;
+	private JLabel lbl;
 	int Max=15;
 	int n=10;
 	Data A=new Data();
@@ -50,19 +50,19 @@ public class Main {
 		frame.setTitle("Unsupervised Learning Algorithm for Pharmacokinetic Responses\n");
 		frame.setBackground(new Color(0, 0, 0));
 		
-		lblTeseDoElson = new JLabel("Insert PK data file");
-		lblTeseDoElson.setBounds(9, 0, 509, 50);
-		lblTeseDoElson.setForeground(new Color(0, 0, 153));
-		lblTeseDoElson.setFont(new Font("Dialog", Font.BOLD, 26));
-		frame.getContentPane().add(lblTeseDoElson);
+		lbl = new JLabel("Insert PK data file");
+		lbl.setBounds(9, 0, 509, 50);
+		lbl.setForeground(new Color(0, 0, 153));
+		lbl.setFont(new Font("Dialog", Font.BOLD, 26));
+		frame.getContentPane().add(lbl);
 		
-		JLabel lblDadosDeAmostra = new JLabel("Data file in CSV format");
-		lblDadosDeAmostra.setBounds(9, 61, 151, 27);
+		JLabel lblDadosDeAmostra = new JLabel("Data file in CSV format:");
+		lblDadosDeAmostra.setBounds(9, 61, 170, 27);
 		lblDadosDeAmostra.setBackground(new Color(255, 255, 255));
 		frame.getContentPane().add(lblDadosDeAmostra);
 		
 		textField = new JTextField();
-		textField.setBounds(161, 65, 171, 19);
+		textField.setBounds(183, 65, 153, 19);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
