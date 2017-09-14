@@ -324,12 +324,18 @@ public class EMAlgorithm {
 		//SE NAO ALTERA, bool=0 => PARA O ALGORITMO
 		return bool;
 	}
-	public double likel(double[][] P0, double[][] X0){
+	public double likel(double[][] P0, double[][] X0, int[] patientspercluster){
 		double res=0;
 		double[][] F;
 		double[][] P;
 		double[][] X;
 		int i,l;
+		
+		for(i=0;i<num_clusters;i++){
+			if(patientspercluster[i]==0){
+				return -50000;
+			}
+		}
 		
 		F=actClustConcentration();
 		P=actLoglikelihood(F);
@@ -583,8 +589,8 @@ public class EMAlgorithm {
 		return res;
 	}
 	
-	public double MDL(double [][] loglikelihood, double[][] Xil){
-		double Q=likel(loglikelihood,Xil);
+	public double MDL(double [][] loglikelihood, double[][] Xil, int[] patientspercluster){
+		double Q=likel(loglikelihood,Xil,patientspercluster);
 		return Q-0.5*Math.log(N_patients)*num_clusters*(4+((num_clusters-1)/num_clusters));
 	}
 	
@@ -596,6 +602,7 @@ public class EMAlgorithm {
 		double[][] loglikelihood;
 		//double[] W;
 		double[][] Xil;
+		int[] patientspercluster;
 		double Q=-150;	
 		i=0;
 		
@@ -628,11 +635,11 @@ public class EMAlgorithm {
 				actSigma(Xil,cluster_concentration);
 			}
 			
-			actualizeClusterAssignment(Xil);
+			patientspercluster=actualizeClusterAssignment(Xil);
 			
-			Q=likel(loglikelihood,Xil);
+			Q=likel(loglikelihood,Xil,patientspercluster);
 			out=new Output(C_params,Q,j,Sigma,w,num_clusters,cluster);
-			double MDLresult=MDL(loglikelihood,Xil);
+			double MDLresult=MDL(loglikelihood,Xil,patientspercluster);
 			System.out.println("Q: "+Q+"; MDL: "+(MDLresult-Q)+"; MDL result: "+MDLresult);
 			if(MDLresult>maxMDLtotal){
 				maxMDLtotal=MDLresult;
