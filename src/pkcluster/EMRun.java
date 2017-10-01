@@ -138,8 +138,7 @@ public class EMRun {
 					int num=0;
 					for(Future<Output> future : futures){
 						o1=future.get();
-						System.out.println("num: "+num);o1.imprime();
-						if(num==0||o1.Q>Q){Q=o1.Q;o2=o1;System.out.println("^ new best");}
+						if(num==0||o1.Q>Q){Q=o1.Q;o2=o1;}
 						num++;
 					}
 					

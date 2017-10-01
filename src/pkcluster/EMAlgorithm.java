@@ -330,13 +330,13 @@ public class EMAlgorithm {
 		double[][] P;
 		double[][] X;
 		int i,l;
-		
+		/*
 		for(i=0;i<num_clusters;i++){
 			if(patientspercluster[i]==0){
 				return -50000;
 			}
 		}
-		
+		*/
 		F=actClustConcentration();
 		P=actLoglikelihood(F);
 		X=actXil(P);
