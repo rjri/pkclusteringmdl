@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 
 public class Main {
 
@@ -73,11 +74,21 @@ public class Main {
 		textPane.setFont(new Font("Dialog", Font.BOLD, 24));
 		frame.getContentPane().add(textPane);
 		
+		final JToggleButton togglebutton = new JToggleButton("Use NML");
+		togglebutton.setBounds(489, 30, 97, 20);
+		frame.getContentPane().add(togglebutton);
+		
 		JButton btnAmostra = new JButton("Read data");
 		btnAmostra.setBounds(344, 65, 145, 19);
 		btnAmostra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try{
+					boolean nml;
+					if(togglebutton.isSelected()){
+						nml=true;
+					}else{
+						nml=false;
+					}
 					
 					A.read(textField.getText());
 					Max=A.N;
@@ -87,7 +98,7 @@ public class Main {
 					
 					textPane.setText("Data Read!");
 					textPane.setForeground(Color.WHITE);
-					EMRun window2 = new EMRun(A, Max, n);
+					EMRun window2 = new EMRun(A, Max, n, nml);
 					window2.frame.setVisible(true);
 					
 					} catch (Exception e2){

@@ -1,5 +1,7 @@
 package pkcluster;
 
+import java.math.BigInteger;
+
 public class EMAlgorithm {
 	int n_sampling_instants;
 	int N_patients;
@@ -20,11 +22,13 @@ public class EMAlgorithm {
 	double[] maxMDL_Sigma;
 	double[] maxMDL_w;
 	int[] maxMDL_cluster;
+	boolean nml;
 	
-	public EMAlgorithm(double[] AT, double[][] AY, int M0){
+	public EMAlgorithm(double[] AT, double[][] AY, int M0, boolean nml1){
 		int i;
 		double m;
 				
+		nml=nml1;
 		n_sampling_instants=AT.length;
 		N_patients=AY.length;
 		if(M0==0)num_clusters=N_patients/3;
@@ -589,9 +593,94 @@ public class EMAlgorithm {
 		return res;
 	}
 	
+	static double logGamma(double x) {
+	      double tmp = (x - 0.5) * Math.log(x + 4.5) - (x + 4.5);
+	      double ser = 1.0 + 76.18009173    / (x + 0)   - 86.50532033    / (x + 1)
+	                       + 24.01409822    / (x + 2)   -  1.231739516   / (x + 3)
+	                       +  0.00120858003 / (x + 4)   -  0.00000536382 / (x + 5);
+	      return tmp + Math.log(ser * Math.sqrt(2 * Math.PI));
+	}
+	
+	static double gamma(double x) { return Math.exp(logGamma(x)); }
+	
+	double multiGamma(double x){
+		if(x<=(n_sampling_instants-1)/2){ 
+			return 1;
+		}
+		double prod=1;
+		for(int j=1;j<=n_sampling_instants;j++){
+			prod=prod*gamma(x+((1-j)/2));
+		}
+		prod=prod*Math.pow(Math.PI,(n_sampling_instants*(n_sampling_instants-1))/4);
+		return prod;
+	}
+	
+	double Bfunc(double r,double lambda){
+		double num=Math.pow(2, n_sampling_instants+1)*Math.pow(r,n_sampling_instants/2)*Math.pow(lambda,-(n_sampling_instants*n_sampling_instants)/2);
+		double den=Math.pow(n_sampling_instants, n_sampling_instants+1)*gamma(n_sampling_instants/2.0);
+		return num/den;
+	}
+	
+	double Ifunc(int h,double r,double lambda){
+		double res=1/multiGamma((h-1)/2.0);
+		if(res==1){
+			return 1;
+		}
+		res=res*Bfunc(r,lambda)*Math.pow(h/(2*Math.E),(n_sampling_instants*h)/2.0);
+		return res;
+	}
+	
+	static BigInteger binomial(final int N, final int K) {
+	    BigInteger ret = BigInteger.ONE;
+	    for (int k = 0; k < K; k++) {
+	        ret = ret.multiply(BigInteger.valueOf(N-k))
+	                 .divide(BigInteger.valueOf(k+1));
+	    }
+	    return ret;
+	}
+	
+	double[][] Cfunc(double r,double lambda){
+		double[][] mat=new double[max_clusters][N_patients+1];
+		for(int i=0;i<max_clusters;i++){
+			for(int j=0;j<N_patients+1;j++){
+				mat[i][j]=1;
+			}
+		}
+		mat[max_clusters-1][0]=1;
+		for(int j=1;j<=N_patients;j++){
+			mat[0][j]=Ifunc(j,r,lambda);
+		}
+		for(int k=2;k<=max_clusters;k++){
+			for(int j=1;j<=N_patients;j++){
+				double sum=0;
+				for (int r1=0;r1<=j;r1++){
+					sum=sum+binomial(j,r1).doubleValue()*Math.pow((double)r1/j,r1)*Math.pow((j-(double)r1)/j,(j-r1))*mat[k-2][r1]*Ifunc(j-r1,r,lambda);
+				}
+				mat[k-1][j]=sum;
+			}
+		}
+		return mat;
+	}
+	
+	int factorial(int n){
+		if(n==0){
+			return 1;
+		}
+		int res=1;
+		for(int i=2;i<=n;i++){
+			res=res*i;
+		}
+		return res;
+	}
+	
 	public double MDL(double [][] loglikelihood, double[][] Xil, int[] patientspercluster){
 		double Q=likel(loglikelihood,Xil,patientspercluster);
 		return Q-0.5*Math.log(N_patients)*num_clusters*(4+((num_clusters-1)/num_clusters));
+	}
+	
+	public double NML(double [][] loglikelihood, double[][] Xil, int[] patientspercluster, double[][] mat){
+		double Q=likel(loglikelihood,Xil,patientspercluster);
+		return Q-Math.log(mat[num_clusters-1][N_patients])-Math.log(num_clusters)-Math.log(factorial(num_clusters));
 	}
 	
 	public Output runEM(){
@@ -600,11 +689,16 @@ public class EMAlgorithm {
 		int j=0,i,it;
 		double[][] cluster_concentration;
 		double[][] loglikelihood;
-		//double[] W;
 		double[][] Xil;
 		int[] patientspercluster;
 		double Q=-150;	
 		i=0;
+
+		double[][] mat=new double[max_clusters][N_patients+1];
+		
+		if(nml==true){
+			mat=Cfunc(625*N_patients,1);
+		}
 		
 		for(i=max_clusters;i>0;i--){
 			num_clusters=i;
@@ -638,11 +732,17 @@ public class EMAlgorithm {
 			patientspercluster=actualizeClusterAssignment(Xil);
 			
 			Q=likel(loglikelihood,Xil,patientspercluster);
-			out=new Output(C_params,Q,j,Sigma,w,num_clusters,cluster);
-			double MDLresult=MDL(loglikelihood,Xil,patientspercluster);
-			System.out.println("Q: "+Q+"; MDL: "+(MDLresult-Q)+"; MDL result: "+MDLresult);
-			if(MDLresult>maxMDLtotal){
-				maxMDLtotal=MDLresult;
+			out=new Output(C_params,Q,j,Sigma,w,num_clusters,cluster,nml);
+			double result;
+			if(nml==false){
+				result=MDL(loglikelihood,Xil,patientspercluster);
+				System.out.println("Q: "+Q+"; MDL: "+(result-Q)+"; MDL result: "+result);
+			}else{
+				result=NML(loglikelihood,Xil,patientspercluster,mat);
+				System.out.println("Q: "+Q+"; NML: "+(result-Q)+"; NML result: "+result);
+			}
+			if(result>maxMDLtotal){
+				maxMDLtotal=result;
 				maxMDLnumclusttotal=num_clusters;
 				for(it=0;it<C_params.length;it++){
 					System.arraycopy(C_params[it], 0, maxMDL_C_params[it], 0, C_params[it].length);
@@ -652,7 +752,7 @@ public class EMAlgorithm {
 				System.arraycopy(cluster, 0, maxMDL_cluster, 0, cluster.length);
 			}
 		}
-		out=new Output(maxMDL_C_params,maxMDLtotal,j,maxMDL_Sigma,maxMDL_w,maxMDLnumclusttotal,maxMDL_cluster);
+		out=new Output(maxMDL_C_params,maxMDLtotal,j,maxMDL_Sigma,maxMDL_w,maxMDLnumclusttotal,maxMDL_cluster,nml);
 
 		return out;
 	}

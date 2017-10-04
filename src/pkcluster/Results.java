@@ -20,6 +20,7 @@ public class Results {
 	public JLabel lbl;
 	public Output o;
 	public double time;
+	static boolean nml;
 	
 	private JTextField textField_3;
 	private JTextField textField_4;
@@ -37,7 +38,7 @@ public class Results {
 				try {
 					Output o1=null;
 					double t=0;
-					Results window = new Results(o1,t);
+					Results window = new Results(o1,t,nml);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,9 +48,10 @@ public class Results {
 	}
 
 	
-	public Results(Output o1, double t) {
+	public Results(Output o1, double t,boolean nml1) {
 		o=o1;
 		time=t;
+		nml=nml1;
 		initialize();
 	}
 	
@@ -61,7 +63,11 @@ public class Results {
 		    int i,l;
 		    String Sw="",SS="",SC="",Si="";
 		    writer.append("Results\n");
-		    writer.append("MDL value: "+O.Q+"\n");
+		    if(nml==false){
+		    	writer.append("MDL value: "+O.Q+"\n");
+		    }else{
+		    	writer.append("NML value: "+O.Q+"\n");
+		    }
 		    writer.append("Clusters: "+O.cl+"\n");
 		    
 		    for(l=0;l<O.cl-1;l++){
@@ -148,7 +154,11 @@ public class Results {
 		frame.getContentPane().add(textField_4);
 		textField_4.setColumns(10);
 		
-		lblQValue = new JLabel("MDL:");
+		if(nml==false){
+			lblQValue = new JLabel("MDL:");
+		}else{
+			lblQValue = new JLabel("NML:");
+		}
 		lblQValue.setBounds(222, 65, 53, 19);
 		frame.getContentPane().add(lblQValue);
 		

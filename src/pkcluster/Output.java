@@ -9,8 +9,9 @@ public class Output {
 	public int cl; 
 	public Output next;
 	int[] cluster;
+	boolean nml;
 	
-	public Output(double[][] C0, double Q0, int p, double[] S,double[] w, int c,int[] cluster0){
+	public Output(double[][] C0, double Q0, int p, double[] S,double[] w, int c,int[] cluster0,boolean nml1){
 		C=C0;
 		Q=Q0;
 		passos=p;
@@ -19,7 +20,7 @@ public class Output {
 		cl=c;
 		next=null;
 		cluster=cluster0;
-		
+		nml=nml1;
 	}
 	
 	
@@ -41,7 +42,12 @@ public class Output {
 		System.out.println("a; ke; ka");
 		for(l=0;l<cl;l++)
 			System.out.println("{"+C[l][0]+", "+C[l][1]+", "+C[l][2]+"},");		
-		System.out.println("MDL value: "+Q);
+		
+		if(nml==false){
+			System.out.println("MDL value: "+Q);
+		}else{
+			System.out.println("NML value: "+Q);
+		}
 	}
 	
 	public String string(){

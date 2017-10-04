@@ -30,6 +30,7 @@ public class EMRun {
 	public Data A;
 	public Output o;
 	public double time;
+	public boolean nml;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -38,7 +39,8 @@ public class EMRun {
 					int Max1=15;
 					int n1=10;
 					Data A1=new Data();
-					EMRun window = new EMRun(A1, Max1, n1);
+					boolean nml1=false;
+					EMRun window = new EMRun(A1, Max1, n1,nml1);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,8 +49,8 @@ public class EMRun {
 		});
 	}
 	
-	public EMRun(Data A1, int Max1, int n1) {
-		A=A1;Max=Max1;n=n1;
+	public EMRun(Data A1, int Max1, int n1, boolean nml1) {
+		A=A1;Max=Max1;n=n1;nml=nml1;
 		initialize();
 	}
 
@@ -120,12 +122,14 @@ public class EMRun {
 					M0=Integer.parseInt(textField_2.getText());
 					o2=null;
 					
+					System.out.println("nml "+nml);
+					
 					ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 					List<Future<Output>> futures = new ArrayList<Future<Output>>();
 					for(k=0;k<K;k++){
 						Callable<Output> callable = new Callable<Output>(){
 							public Output call(){
-								EMAlgorithm E=new EMAlgorithm(A.T,A.M,M0);
+								EMAlgorithm E=new EMAlgorithm(A.T,A.M,M0,nml);
 								E.inicialize(A);
 								Output op=E.runEM();
 								return op;
@@ -152,7 +156,7 @@ public class EMRun {
 					textPane.setText("DONE!");
 					textPane.setForeground(Color.WHITE);
 					
-					Results window = new Results(o,time);
+					Results window = new Results(o,time,nml);
 					window.frame.setVisible(true);
 					
 				} catch (Exception e1){
