@@ -122,8 +122,6 @@ public class EMRun {
 					M0=Integer.parseInt(textField_2.getText());
 					o2=null;
 					
-					System.out.println("nml "+nml);
-					
 					ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 					List<Future<Output>> futures = new ArrayList<Future<Output>>();
 					for(k=0;k<K;k++){

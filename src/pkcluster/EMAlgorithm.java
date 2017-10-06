@@ -334,7 +334,7 @@ public class EMAlgorithm {
 		double[][] P;
 		double[][] X;
 		int i,l;
-		/*
+		/* add to prevent empty clusters
 		for(i=0;i<num_clusters;i++){
 			if(patientspercluster[i]==0){
 				return -50000;
@@ -739,7 +739,9 @@ public class EMAlgorithm {
 				System.out.println("Q: "+Q+"; MDL: "+(result-Q)+"; MDL result: "+result);
 			}else{
 				result=NML(loglikelihood,Xil,patientspercluster,mat);
-				System.out.println("Q: "+Q+"; NML: "+(result-Q)+"; NML result: "+result);
+				if(Q>-40000){
+					System.out.println("Q: "+Q+"; NML: "+(result-Q)+"; NML result: "+result);
+				}
 			}
 			if(result>maxMDLtotal){
 				maxMDLtotal=result;
