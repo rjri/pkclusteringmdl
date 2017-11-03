@@ -4,4 +4,4 @@ description: A Java implementation for clustering of pharmacokinetic responses u
 show_downloads: true
 webrick:
   headers:
-    My-Header: My-Value
+    My-Header: pkclusteringmdl
