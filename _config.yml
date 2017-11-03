@@ -2,6 +2,3 @@ theme: jekyll-theme-minimal
 title: pkclusteringmdl
 description: A Java implementation for clustering of pharmacokinetic responses using model selection based on MDL.
 show_downloads: true
-webrick:
-  headers:
-    My-Header: pkclusteringmdl
