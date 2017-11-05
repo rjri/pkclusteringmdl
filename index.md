@@ -15,3 +15,9 @@ $ java -jar pkclusteringmdl.jar
 ```
 
 Insert full path to csv file with the input data, choose MDL or NML using the toggle button, then specify the number of random initializations and the maximum number of clusters.
+
+![](https://i.imgur.com/qjrg9Iz.png)
+
+![](https://i.imgur.com/AWKv6ur.png)
+
+![](https://i.imgur.com/vBIcoyZ.png)
