@@ -32,7 +32,7 @@ Along with the program, a number of example datasets are provided in the data fo
 
 #### The clustering algorithm
 
-The resulting program was based on an adaptation of an existing [program](https://asmcarvalho.github.io/EMPK/) \[1] that performed clustering using only the Expectation-Maximization algorithm along with user parameters to disregard and merge superfluous clusters. These parameters provided an heuristic solution to the problem without which there was a tendency to overfit the data, providing low-weight clusters with outliers. In order to overcome the shortcomings of the existing implementation, two adaptations using MDL and NML were made.
+This program was based on an adaptation of an existing [program](https://asmcarvalho.github.io/EMPK/) \[1] that performed clustering using only the Expectation-Maximization algorithm along with user parameters to disregard and merge superfluous clusters. These parameters provided an heuristic solution to the problem without which there was a tendency to overfit the data, providing low-weight clusters with outliers. In order to overcome the shortcomings of the existing implementation, two adaptations using MDL and NML were made.
 
 For both these adaptations, the EM algorithm is used for each of the possible number of clusters (from 1 to the user-defined maximum) a set amount of times (the user-defined number of random initializations). The best output from every initialization is then found using either the MDL or NML criteria. Due to the structure of the program, it was possible to parallelize it on the number of random initializations, achieving cost-efficiency.
 
