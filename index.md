@@ -28,7 +28,7 @@ The program will then run the algorithm for the data and parameters provided usi
 
 #### Example datasets
 
-Along with the program, a number of example datasets are provided in the data folder. The titles of the example synthetic datasets indicate if the data is balanced or imbalanced, the number of clusters from which it was generated, the proportions of subjects from each cluster and whether the variance of the data is Low or High. Each of these datasets contain 60 subjects each with 8 samples at the same time instants. There is also a real dataset from theophylline analysis provided in Theo.csv.
+Along with the program, a number of example datasets are provided in the data folder. The titles of the example synthetic datasets indicate if the data is balanced or imbalanced, the number of clusters from which it was generated, the proportions of subjects from each cluster and whether the variance of the data is Low or High. Each of these datasets contain 60 subjects each with 8 samples at the same time instants.
 
 #### The clustering algorithm
 
