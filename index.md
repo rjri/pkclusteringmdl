@@ -14,7 +14,7 @@ To use the program, execute the jar file:
 $ java -jar pkclusteringmdl.jar
 ```
 
-Upon execution of the program, an interface window as seen on the image below will appear. In this window, the user may insert the path to a CSV file with the pharmacokinetic data to be used. In this example, the file Bal-3C-20-20-20-LV.csv given in the data folder is used. The user may choose the criteria to use (MDL or NML) by selecting a radio button.
+Upon execution of the program, an interface window as seen on the image below will appear. In this window, the user may insert the path to a CSV file with the pharmacokinetic data to be used. In this example, the file Bal-3C-20-20-20-LV.csv given in the data folder is used. The user may choose the criteria to be used (MDL or NML) by selecting a radio button.
 
 ![](https://i.imgur.com/vW5vuwH.png)
 
