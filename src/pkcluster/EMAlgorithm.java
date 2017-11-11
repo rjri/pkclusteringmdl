@@ -5,7 +5,7 @@ import java.math.BigInteger;
 public class EMAlgorithm {
 	int n_sampling_instants;
 	int N_patients;
-	int num_clusters;
+	int num_clusters, min_clust;
 	static int max_clusters;
 	int[] cluster;
 	double[] T;
@@ -24,7 +24,7 @@ public class EMAlgorithm {
 	int[] maxMDL_cluster;
 	boolean nml;
 	
-	public EMAlgorithm(double[] AT, double[][] AY, int M0, boolean nml1){
+	public EMAlgorithm(double[] AT, double[][] AY, int M0, boolean nml1, int m0){
 		int i;
 		double m;
 				
@@ -33,6 +33,7 @@ public class EMAlgorithm {
 		N_patients=AY.length;
 		if(M0==0)num_clusters=N_patients/3;
 		else num_clusters=M0;
+		min_clust=m0;
 		T=AT;
 		Y=AY;
 		conv=0;
@@ -700,7 +701,7 @@ public class EMAlgorithm {
 			mat=Cfunc(625*N_patients,1);
 		}
 		
-		for(i=max_clusters;i>0;i--){
+		for(i=max_clusters;i>min_clust-1;i--){
 			num_clusters=i;
 			Sigma=new double[num_clusters];
 			for(i=0;i<num_clusters;i++)Sigma[i]=1;

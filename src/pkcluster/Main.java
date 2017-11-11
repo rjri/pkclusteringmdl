@@ -6,12 +6,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.JToggleButton;
 
 public class Main {
 
@@ -74,9 +75,18 @@ public class Main {
 		textPane.setFont(new Font("Dialog", Font.BOLD, 24));
 		frame.getContentPane().add(textPane);
 		
-		final JToggleButton togglebutton = new JToggleButton("Use NML");
-		togglebutton.setBounds(489, 30, 97, 20);
-		frame.getContentPane().add(togglebutton);
+		final JRadioButton mdlbutton = new JRadioButton("MDL");
+		mdlbutton.setBounds(389, 30, 97, 20);
+		mdlbutton.setSelected(true);
+		frame.getContentPane().add(mdlbutton);
+		
+		final JRadioButton nmlbutton = new JRadioButton("NML");
+		nmlbutton.setBounds(489, 30, 97, 20);
+		frame.getContentPane().add(nmlbutton);
+		
+		ButtonGroup group = new ButtonGroup();
+		group.add(mdlbutton);
+		group.add(nmlbutton);
 		
 		JButton btnAmostra = new JButton("Read data");
 		btnAmostra.setBounds(344, 65, 145, 19);
@@ -84,7 +94,7 @@ public class Main {
 			public void actionPerformed(ActionEvent arg0) {
 				try{
 					boolean nml;
-					if(togglebutton.isSelected()){
+					if(nmlbutton.isSelected()){
 						nml=true;
 					}else{
 						nml=false;
