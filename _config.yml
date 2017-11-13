@@ -1,4 +1,4 @@
 theme: jekyll-theme-minimal
 title: pkclusteringmdl
-description: A Java implementation for clustering of pharmacokinetic responses using model selection based on MDL.
+description: A Java implementation for clustering of pharmacokinetic responses using model selection based on MDL or NML.
 show_downloads: true
