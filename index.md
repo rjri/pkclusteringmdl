@@ -36,6 +36,24 @@ This program was based on an adaptation of an existing [program](https://asmcarv
 
 For both these adaptations, the EM algorithm is used for each of the possible number of clusters (from 1 to the user-defined maximum) a set amount of times (the user-defined number of random initializations). The best output from every initialization is then found using either the MDL or NML criteria. Due to the structure of the program, it was possible to parallelize it on the number of random initializations, achieving cost-efficiency.
 
+#### Results
+
+To show the quality of the results obtained by the program, the dataset Bal-5C-12-12-12-12-12-LV.csv, as seen below, will be used. The different colors represent different clusters from which the data was generated.
+
+![](https://i.imgur.com/fbnGtE5.png)
+
+The program is able to assign each subject to the correct cluster and determine the parameters of the curves representing each cluster, as shown below.
+
+![](https://i.imgur.com/cdoPng9.png)
+
+As an example to verify the functioning of the program, the tables below represent the outputs of a single random initialization of the algorithm for each of the possible numbers of clusters (from 1 to 10 in this example), using both MDL and NML. The Q value is the goodness-of-fit term as given by that execution of the EM algorithm. The parametric complexity term, which is calculated differently for MDL and NML, is the term that gives more value to simpler models of the data. The sum of these two values is the deciding factor for the program to choose the best possible results for the data.
+
+![](https://i.imgur.com/cshlY1V.png)
+
+![](https://i.imgur.com/hlc3MDi.png)
+
+As expected from the dataset used, in both situations the program chose 5 clusters as the optimal result, as it had the highest sum.
+
 #### References
 
 *   \[1] E. Tomas, S. Vinga, and A. M. Carvalho.  Unsupervised learning of pharmacokinetic responses. Computational Statistics, 32:409–428, 2017.
