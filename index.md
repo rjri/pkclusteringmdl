@@ -48,14 +48,6 @@ The program is able to assign each subject to the correct cluster and determine 
 
 ![](https://i.imgur.com/cdoPng9.png)
 
-As an example to verify the functioning of the program, the tables below represent the outputs of a single random initialization of the algorithm for each of the possible numbers of clusters (from 1 to 10 in this example), using both MDL and NML. The Q value is the goodness-of-fit term as given by that execution of the EM algorithm. The parametric complexity term, which is calculated differently for MDL and NML, is the term that gives more value to simpler models of the data. The sum of these two values is the deciding factor for the program to choose the best possible results for the data.
-
-![](https://i.imgur.com/cshlY1V.png)
-
-![](https://i.imgur.com/hlc3MDi.png)
-
-As expected from the dataset used, in both situations the program chose 5 clusters as the optimal result, as it had the highest sum.
-
 #### References
 
 *   \[1] E. Tomas, S. Vinga, and A. M. Carvalho.  Unsupervised learning of pharmacokinetic responses. Computational Statistics, 32:409–428, 2017.
